@@ -1,0 +1,13 @@
+diff --git a/data/org.fcitx.Fcitx5.desktop.in.in b/data/org.fcitx.Fcitx5.desktop.in.in
+index 58793b45..169fd5c0 100644
+--- a/data/org.fcitx.Fcitx5.desktop.in.in
++++ b/data/org.fcitx.Fcitx5.desktop.in.in
+@@ -2,7 +2,7 @@
+ Name=Fcitx 5
+ GenericName=Input Method
+ Comment=Start Input Method
+-Exec=@FCITX_INSTALL_BINDIR@/fcitx5
++Exec=sh -c 'if [ "$XDG_CURRENT_DESKTOP" == "KDE" ] && [ "$(qdbus6 org.kde.KWin /VirtualKeyboard org.kde.kwin.VirtualKeyboard.active)" = "true" ]; then exit; else exec @FCITX_INSTALL_BINDIR@/fcitx5; fi'
+ Icon=@FCITX_ICON_NAME@
+ Terminal=false
+ Type=Application
