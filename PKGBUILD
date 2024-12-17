@@ -12,7 +12,7 @@ license=('LGPL-2.1-or-later AND Unicode-DFS-2016')
 conflicts=('fcitx')
 groups=('fcitx5-im')
 depends=('cairo' 'enchant' 'iso-codes' 'libgl' 'libxkbcommon-x11' 'pango' 'systemd' 'wayland'
-         'xcb-imdkit' 'xcb-util-wm' 'libxkbfile' 'gdk-pixbuf2')
+         'xcb-imdkit' 'xcb-util-wm' 'libxkbfile' 'gdk-pixbuf2' 'json-c')
 makedepends=('git' 'extra-cmake-modules' 'ninja' 'wayland-protocols' 'fmt')
 source=("git+https://github.com/fcitx/fcitx5.git#tag=$pkgver?signed"
         "https://download.fcitx-im.org/data/en_dict-$_dictver.tar.gz")

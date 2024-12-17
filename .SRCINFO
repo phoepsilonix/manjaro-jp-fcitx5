@@ -23,6 +23,7 @@ pkgbase = fcitx5
 	depends = xcb-util-wm
 	depends = libxkbfile
 	depends = gdk-pixbuf2
+	depends = json-c
 	conflicts = fcitx
 	noextract = en_dict-20121020.tar.gz
 	source = git+https://github.com/fcitx/fcitx5.git#tag=5.1.11?signed
