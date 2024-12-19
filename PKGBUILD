@@ -4,8 +4,8 @@
 pkgname=fcitx5
 pkgver=5.1.12
 _dictver=20121020
-_commit=0cc48e3def2a1e34ea5cc20509811c1e036825e3
-pkgrel=4
+_commit=c829acf10790135668e7a984f13f958542d9288c
+pkgrel=6
 pkgdesc="Next generation of fcitx"
 arch=('x86_64')
 url="https://github.com/fcitx/fcitx5"
@@ -19,7 +19,7 @@ source=("git+https://github.com/fcitx/fcitx5.git#commit=$_commit"
         "https://download.fcitx-im.org/data/en_dict-$_dictver.tar.gz"
         kde.patch)
 noextract=("en_dict-$_dictver.tar.gz")
-sha512sums=('ee93c3611e9ccea0dccbceb8657f39fec2da015931b1b588ee411c36b731b9c2c3379039d74efcd53dd2dc65e4b32757057307bc111e2c337e6caccdd9177f19'
+sha512sums=('c431c8829cd4983391701b2ab5522798c36951ff807ff8154601a7af0bffbdc95fab75b7d9d2e1d9a62a7e528b635944c798ae6f8f07428be2f4d1239bcc605a'
             '8418bd02492bfd786c0fab93be4400ef027ec8e9fac02220cc1f653f5eb67f54573a6a84a15baba19bb34ab892745c87df16499d6304ea75009131e2ab3b97f2'
             '822ca854cc199af5823f3c21ec1243425474a7b3db9712da17303ea16bd828a6e580f631b451194c3ce2f78a1cfe0db8a60be045c75bb2570ba96461ccc8af78')
 validpgpkeys=('2CC8A0609AD2A479C65B6D5C8E8B898CBF2412F9') # Weng Xuetian <wengxt@gmail.com>
