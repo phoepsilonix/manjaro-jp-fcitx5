@@ -36,7 +36,7 @@ index 58793b45..8d37d795 100644
  Type=Application
 diff --git a/data/start-fcitx5.sh.in b/data/start-fcitx5.sh.in
 new file mode 100755
-index 00000000..63eed345
+index 00000000..b8e6fb24
 --- /dev/null
 +++ b/data/start-fcitx5.sh.in
 @@ -0,0 +1,10 @@
@@ -44,8 +44,8 @@ index 00000000..63eed345
 +
 +if [ "$XDG_CURRENT_DESKTOP" = "KDE" ];then
 +    SUDO_USER="$(who|head -n1|cut -f1 -d' ')"
-+    sudo -u "$SUDO_USER" qdbus6 org.kde.KWin /VirtualKeyboard org.kde.kwin.VirtualKeyboard.active
-+    if [ $? -eq 1 ]; then
++    RET=$(su $SUDO_USER -c 'qdbus6 org.kde.KWin /VirtualKeyboard org.kde.kwin.VirtualKeyboard.active')
++    if [ "$RET" = "true" ]; then
 +        exit
 +    fi
 +fi

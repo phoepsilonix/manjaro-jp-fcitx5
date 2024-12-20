@@ -1,5 +1,5 @@
 post_install() {
-    if [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    if [ $(pgrep plasmashell) ]; then
         echo "Setting up fcitx5 for KDE"
         [ -z $SUDO_USER ] && SUDO_USER=$(who|head -n1|cut -f1 -d" ")
         [ -z $SUDO_HOME ] && SUDO_HOME=$(eval echo ~$SUDO_USER)
@@ -18,7 +18,7 @@ post_install() {
 }
 
 post_upgrade() {
-    if [ "$XDG_CURRENT_DESKTOP" = "KDE" ]; then
+    if [ $(pgrep plasmashell) ]; then
         echo "Setting up fcitx5 for KDE"
         [ -z $SUDO_USER ] && SUDO_USER=$(who|head -n1|cut -f1 -d" ")
         [ -z $SUDO_HOME ] && SUDO_HOME=$(eval echo ~$SUDO_USER)
@@ -37,10 +37,14 @@ post_upgrade() {
 }
 
 post_remove() {
-    [ -z $SUDO_USER ] && SUDO_USER=$(who|head -n1|cut -f1 -d" ")
-    [ -z $SUDO_HOME ] && SUDO_HOME=$(eval echo ~$SUDO_USER)
-    sudo -u $SUDO_USER kwriteconfig6 --delete --file $SUDO_HOME/.config/kwinrc --group 'Wayland' --key 'InputMethod' \
-    || sudo -u $SUDO_USER kwriteconfig5 --delete --file $SUDO_HOME/.config/kwinrc --group 'Wayland' --key 'InputMethod'
-    kwriteconfig6 --delete --file /etc/skel/.config/kwinrc --group 'Wayland' --key 'InputMethod' \
-    || kwriteconfig5 --delete --file /etc/skel/.config/kwinrc --group 'Wayland' --key 'InputMethod'
+    if [ $(pgrep plasmashell) ]; then
+        [ -z $SUDO_USER ] && SUDO_USER=$(who|head -n1|cut -f1 -d" ")
+        [ -z $SUDO_HOME ] && SUDO_HOME=$(eval echo ~$SUDO_USER)
+        sudo -u $SUDO_USER kwriteconfig6 --delete --file $SUDO_HOME/.config/kwinrc --group 'Wayland' --key 'InputMethod' \
+        || sudo -u $SUDO_USER kwriteconfig5 --delete --file $SUDO_HOME/.config/kwinrc --group 'Wayland' --key 'InputMethod'
+        kwriteconfig6 --delete --file /etc/skel/.config/kwinrc --group 'Wayland' --key 'InputMethod' \
+        || kwriteconfig5 --delete --file /etc/skel/.config/kwinrc --group 'Wayland' --key 'InputMethod'
+        pgrep fcitx5 && pkill fcitx5 || true
+    fi
 }
+
