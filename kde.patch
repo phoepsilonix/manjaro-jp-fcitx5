@@ -1,5 +1,28 @@
+diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
+index b2c7d810..41e38ec3 100644
+--- a/data/CMakeLists.txt
++++ b/data/CMakeLists.txt
+@@ -4,6 +4,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fcitx5-configtool.desktop.in.in
+                ${CMAKE_CURRENT_BINARY_DIR}/fcitx5-configtool.desktop.in @ONLY)
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.fcitx.Fcitx5.desktop.in.in
+                ${CMAKE_CURRENT_BINARY_DIR}/org.fcitx.Fcitx5.desktop.in @ONLY)
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/start-fcitx5.sh.in
++               ${CMAKE_CURRENT_BINARY_DIR}/start-fcitx5.sh @ONLY)
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fcitx5-diagnose.sh
+                ${CMAKE_CURRENT_BINARY_DIR}/fcitx5-diagnose ESCAPE_QUOTES @ONLY)
+ 
+@@ -30,6 +32,9 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/fcitx5-diagnose" DESTINATION "${FCITX
+ GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+ 
+ install(DIRECTORY default DESTINATION "${FCITX_INSTALL_PKGDATADIR}" COMPONENT config)
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/start-fcitx5.sh"
++        DESTINATION "${FCITX_INSTALL_LIBEXECDIR}/fcitx5/"
++        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+ 
+ if (WAYLAND_FOUND AND ENABLE_X11)
+     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/20-fcitx-x11.in
 diff --git a/data/org.fcitx.Fcitx5.desktop.in.in b/data/org.fcitx.Fcitx5.desktop.in.in
-index 58793b45..169fd5c0 100644
+index 58793b45..8d37d795 100644
 --- a/data/org.fcitx.Fcitx5.desktop.in.in
 +++ b/data/org.fcitx.Fcitx5.desktop.in.in
 @@ -2,7 +2,7 @@
@@ -7,7 +30,23 @@ index 58793b45..169fd5c0 100644
  GenericName=Input Method
  Comment=Start Input Method
 -Exec=@FCITX_INSTALL_BINDIR@/fcitx5
-+Exec=sh -c 'if [ "$XDG_CURRENT_DESKTOP" == "KDE" ] && [ "$(qdbus6 org.kde.KWin /VirtualKeyboard org.kde.kwin.VirtualKeyboard.active)" = "true" ]; then exit; else exec @FCITX_INSTALL_BINDIR@/fcitx5; fi'
++Exec=sh @FCITX_INSTALL_LIBEXECDIR@/fcitx5/start-fcitx5.sh
  Icon=@FCITX_ICON_NAME@
  Terminal=false
  Type=Application
+diff --git a/data/start-fcitx5.sh.in b/data/start-fcitx5.sh.in
+new file mode 100755
+index 00000000..63eed345
+--- /dev/null
++++ b/data/start-fcitx5.sh.in
+@@ -0,0 +1,10 @@
++#!/bin/sh
++
++if [ "$XDG_CURRENT_DESKTOP" = "KDE" ];then
++    SUDO_USER="$(who|head -n1|cut -f1 -d' ')"
++    sudo -u "$SUDO_USER" qdbus6 org.kde.KWin /VirtualKeyboard org.kde.kwin.VirtualKeyboard.active
++    if [ $? -eq 1 ]; then
++        exit
++    fi
++fi
++exec @FCITX_INSTALL_BINDIR@/fcitx5
